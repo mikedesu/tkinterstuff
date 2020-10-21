@@ -313,9 +313,29 @@ attribute_entries = None
 lbl = None
 val1 = None
 btn1 = None
+btn2 = None
+btn3 = None
 btn1a = None
 listbox = None
 genrelist = None
+lb2 = None
+lb3 = None
+val2 = None
+val3 = None
+val2a = None
+btn3a = None
+listbox1 = None
+artistlist = None
+lb4=None
+val4=None
+btn4=None
+btn4a=None
+listbox2=None
+attributelist=None
+lb5=None
+val5=None
+btn5=None
+
 
 def initVars():
     global genrepop 
@@ -326,9 +346,28 @@ def initVars():
     global lbl
     global val1
     global btn1
+    global btn2
     global btn1a
     global listbox
     global genrelist
+    global lb2
+    global lb3
+    global val2
+    global val3
+    global val2a
+    global btn3
+    global btn3a
+    global listbox1
+    global artistlist
+    global lb4
+    global val4
+    global btn4
+    global btn4a
+    global listbox2
+    global attributelist
+    global lb5
+    global val5
+    global btn5
     genrepop = StringVar(second_frame, value="")
     yearlist_attribute = StringVar(second_frame, value=" ")
     attribute_list = StringVar(second_frame, value=" ")
@@ -347,83 +386,50 @@ def initVars():
     genrelist=get_genrelist()
     for g in genrelist:
         listbox.insert(END, g)
-
+    lb2= Label(second_frame, text="Please enter years of interest here: \n Followed by two attributes (from 'Attribute List' below) \n in the next line: \n (with a comma between each year/attribute)", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    lb2.grid(column=0, row=8)
+    val2=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= yearlist_attribute, justify=LEFT, width=50)
+    val2.grid(column=1, row=8)  #6
+    val2a=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= attribute_list,justify=LEFT, width=50)
+    val2a.grid(column=2, row=8)  #6
+    btn2=ttk.Button(second_frame, text="Track attributes throughout the years", width=35, command=pressed_danceabilitybtn)
+    btn2.grid(column=0, row=9) #row 8
+    lb3= Label(second_frame, text="Please enter five artists of interest \n from 'Artist List': \n (with a comma between each artist)", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    lb3.grid(column=0, row=12)  #18
+    val3=Entry(second_frame, font = ("times new roman", 16, "bold"),bd=8, bg="grey", fg='black', textvariable= artist_entry,justify=LEFT, width=50)
+    val3.grid(column=1, row=12)  #6
+    btn3=ttk.Button(second_frame, text="Compare artist popularity (based upon the number \n of popular songs assoicated with each artist)", width=35,command=pressed_artist_pop)
+    btn3.grid(column=0, row=13) 
+    btn3a=tk.Button(second_frame, text="Artist List:", font =("times new roman", 16, "bold"), width=35)
+    btn3a.grid(column=1, row =13) 
+    listbox1=Listbox(second_frame)
+    listbox1.grid(column=1, row=15)  #32
+    artistlist=get_artistlist()
+    for a in artistlist:
+        listbox1.insert(END, a)
+    lb4=Label(second_frame, text="Please enter two attributes from 'Attribute List' \n (with a comma and no space between each attribute) \n (also ensure that five artists are entered directly above)",
+    font = ("times new roman", 16, "bold"), bg ="powder blue", fg="black")
+    lb4.grid(column=0, row = 19)  #18
+    val4=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= attribute_entries,justify=LEFT, width=50)
+    val4.grid(column=1, row=19)  #6
+    btn4=ttk.Button(second_frame, text="Track (and compare) attributes amongst the artists", width=35, command= pressed_track_attributes)
+    btn4.grid(column=0, row=21)
+    btn4a=tk.Button(second_frame, text="Attribute List:", font =("times new roman", 16, "bold"), width=35)
+    btn4a.grid(column=1, row =21)
+    listbox2=Listbox(second_frame)
+    listbox2.grid(column=1, row=23)  #10
+    attributelist=get_attributes()
+    for a in attributelist:
+        listbox2.insert(END, a)
+    lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
+    lb5.grid(column=0, row=25)
+    val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
+    val5.grid(column=1, row=25)
+    btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= genre_popularity)
+    btn5.grid(column=0, row=27)
 
 
 initVars()
-
-
-
-lb2= Label(second_frame, text="Please enter years of interest here: \n Followed by two attributes (from 'Attribute List' below) \n in the next line: \n (with a comma between each year/attribute)", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
-lb2.grid(column=0, row=8)
-
-
-val2=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= yearlist_attribute, justify=LEFT, width=50)
-val2.grid(column=1, row=8)  #6
-val2a=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= attribute_list,justify=LEFT, width=50)
-val2a.grid(column=2, row=8)  #6
-
-
-btn2=ttk.Button(second_frame, text="Track attributes throughout the years", width=35, command=pressed_danceabilitybtn)
-btn2.grid(column=0, row=9) #row 8
-
-
-lb3= Label(second_frame, text="Please enter five artists of interest \n from 'Artist List': \n (with a comma between each artist)", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
-lb3.grid(column=0, row=12)  #18
-
-
-val3=Entry(second_frame, font = ("times new roman", 16, "bold"),bd=8, bg="grey", fg='black', textvariable= artist_entry,justify=LEFT, width=50)
-val3.grid(column=1, row=12)  #6
-
-
-btn3=ttk.Button(second_frame, text="Compare artist popularity (based upon the number \n of popular songs assoicated with each artist)", width=35,
-                command=pressed_artist_pop)
-btn3.grid(column=0, row=13) 
-
-
-btn3a=tk.Button(second_frame, text="Artist List:", font =("times new roman", 16, "bold"), width=35)
-btn3a.grid(column=1, row =13) 
-
-
-listbox1=Listbox(second_frame)
-listbox1.grid(column=1, row=15)  #32
-artistlist=get_artistlist()
-for a in artistlist:
-    listbox1.insert(END, a)
-
-
-lb4= Label(second_frame, text="Please enter two attributes from 'Attribute List' \n (with a comma and no space between each attribute) \n (also ensure that five artists are entered directly above)",
-font = ("times new roman", 16, "bold"), bg ="powder blue", fg="black")
-lb4.grid(column=0, row = 19)  #18
-
-
-val4=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= attribute_entries,justify=LEFT, width=50)
-val4.grid(column=1, row=19)  #6
-btn4=ttk.Button(second_frame, text="Track (and compare) attributes amongst the artists", width=35, command= pressed_track_attributes)
-btn4.grid(column=0, row=21)
-
-
-btn4a=tk.Button(second_frame, text="Attribute List:", font =("times new roman", 16, "bold"), width=35)
-btn4a.grid(column=1, row =21)
-
-
-listbox2=Listbox(second_frame)
-listbox2.grid(column=1, row=23)  #10
-attributelist=get_attributes()
-for a in attributelist:
-    listbox2.insert(END, a)
-
-
-lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
-lb5.grid(column=0, row=25)
-
-
-val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
-val5.grid(column=1, row=25)
-
-
-btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= genre_popularity)
-btn5.grid(column=0, row=27)
-
     
 window.mainloop()
+

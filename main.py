@@ -84,8 +84,6 @@ def createSecondFrame():
     second_frame=Frame(my_canvas)
     my_canvas.create_window((0,0),window=second_frame, anchor="nw")  
 
-
-
 def genre_popularity():
     global window
     genrelst=genre_popularityLst()
@@ -101,7 +99,6 @@ def genre_popularity():
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
     plt.title(label='Genre Popularity Throughout the Years', fontweight=10, pad='2.0')
 
-
 def get_popularity(genre_list):
     dataWithGenresFilepath = "Datasets/data_w_genres.csv"
     with open(dataWithGenresFilepath, newline='', encoding="utf-8") as csvfile:
@@ -115,7 +112,6 @@ def get_popularity(genre_list):
             popularity=float(row['popularity'])
             if popularity < popularity_threshold:
                 continue
-        # genres in current row
             genre_current_row=ast.literal_eval(genrestr)
             i = 0
             len_genre_list = len(genre_list)
@@ -143,7 +139,8 @@ def onClick():
 
 
 def get_danceabilitylist(year_list, attributelst_task2):
-    with open('Datasets/data_by_year.csv', newline='', encoding="utf-8") as csvfile:
+    dataByYearFilepath = "Datasets/data_by_year.csv"
+    with open(dataByYearFilepath, newline='', encoding="utf-8") as csvfile:
         genredata =csv.DictReader(csvfile)
         print("this is attribute list: ", attributelst_task2)
         year_list=list(map(float, year_list))
@@ -382,18 +379,21 @@ def initVars():
     btn5.grid(column=0, row=27)
 
 
-try:
-    createWindow()
-    createMainframe()
-    createMyCanvas()
-    createScrollbars()
-    configMyCanvas()
-    createSecondFrame()
-    initVars()
-    window.mainloop()
-except Exception as e:
-    print("Error: " + str(e))
-    input()
+def main():
+    try:
+        createWindow()
+        createMainframe()
+        createMyCanvas()
+        createScrollbars()
+        configMyCanvas()
+        createSecondFrame()
+        initVars()
+        window.mainloop()
+    except Exception as e:
+        print("Error: " + str(e))
+        input()
     
 
+if __name__ == "__main__":
+    main()
 

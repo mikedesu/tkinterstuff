@@ -84,20 +84,38 @@ def createSecondFrame():
     second_frame=Frame(my_canvas)
     my_canvas.create_window((0,0),window=second_frame, anchor="nw")  
 
+
+
+
+
+
+
+bar1 = None
+
 def genre_popularity():
     global window
+    global bar1
     genrelst=genre_popularityLst()
     print("this is the genrelist: ", genrelst)
     popularity= get_popularity(genrelst)
     print(popularity)
+
+    # create the bargraph figure and add it to the frame
     figure1 = Figure(figsize=(4,3), dpi=100)
     subplot1 = figure1.add_subplot(111) 
     xAxis = genrelst
     yAxis = popularity
     subplot1.bar(xAxis,yAxis, color = 'lightsteelblue') 
+    
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(figure1, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
     plt.title(label='Genre Popularity Throughout the Years', fontweight=10, pad='2.0')
+
+
+
 
 def get_popularity(genre_list):
     dataWithGenresFilepath = "Datasets/data_w_genres.csv"

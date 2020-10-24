@@ -182,6 +182,8 @@ def get_danceabilitylist(year_list, attributelst_task2):
 
 
 def pressed_danceabilitybtn():
+    global window
+    global bar1
     year_liststr=yearlist_attribute.get()
     year_list=[x.strip() for x in year_liststr.split(",")]
     attributestr=attribute_list.get()
@@ -194,7 +196,14 @@ def pressed_danceabilitybtn():
     ax2.plot(year_list, attribute1_list, color="y")
     ax2.set_ylabel("music %s" %(attribute_list_task2[0]))
     ax2.set_xlabel("Year")
-    fig.show()
+    #fig.show()
+    #bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
+    bar1 = FigureCanvasTkAgg(fig, window)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
   
 
 def get_artist_pop(artist_list):
@@ -389,12 +398,12 @@ def initVars():
     attributelist=get_attributes()
     for a in attributelist:
         listbox2.insert(END, a)
-    lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
-    lb5.grid(column=0, row=25)
-    val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
-    val5.grid(column=1, row=25)
-    btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= genre_popularity)
-    btn5.grid(column=0, row=27)
+    #lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
+    #lb5.grid(column=0, row=25)
+    #val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
+    #val5.grid(column=1, row=25)
+    #btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= genre_popularity)
+    #btn5.grid(column=0, row=27)
 
 
 def main():

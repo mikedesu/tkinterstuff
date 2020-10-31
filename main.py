@@ -22,7 +22,7 @@ yearlist_attribute = None
 attribute_list = None
 artist_entry = None
 attribute_entries = None
-lbl = None````
+lbl = None
 val1 = None
 btn1 = None
 btn2 = None
@@ -102,18 +102,35 @@ def genre_popularity():
     print(popularity)
 
     # create the bargraph figure and add it to the frame
-    figure1 = Figure(figsize=(4,3), dpi=100)
-    subplot1 = figure1.add_subplot(111) 
+    
+    # figureSize changes the size of the 'frame' holding the plot/graph
+    figureSize = (20,10)
+    figuredpi = 100
+
+    figure1 = Figure(figsize=figureSize, dpi=figuredpi)
+
+    nrows = 6
+    ncols = 1
+    beginEndPair = (1,5)
+    subplot1 = figure1.add_subplot(nrows, ncols, beginEndPair) 
+    
     xAxis = genrelst
     yAxis = popularity
+    
     subplot1.bar(xAxis,yAxis, color = 'blue') 
+    
+    figure1.suptitle("Genre Pop")
+
+    subplot1.set_xlabel("xlabel")
+    subplot1.set_ylabel("ylabel")
     
     if bar1 != None:
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(figure1, window)
-    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
 
-    plt.title(label='Genre Popularity Throughout the Years', fontweight=10, pad='2.0')
+    bar1.get_tk_widget().pack( side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+    #plt.title(label='Genre Popularity Throughout the Years', fontweight=10, pad='2.0')
 
 
 
@@ -190,13 +207,17 @@ def pressed_danceabilitybtn():
     attributestr=attribute_list.get()
     attribute_list_task2=[x.strip() for x in attributestr.split(",")]
     attribute1_list, attribute2_list=get_danceabilitylist(year_list, attribute_list_task2)
+    
     fig, (ax1, ax2)=plt.subplots(2)
+    
     fig.suptitle("Tracking attributes throughout the years")
     ax1.plot(year_list, attribute2_list, color="m")
     ax1.set_ylabel("music %s" %(attribute_list_task2[1]))
+    
     ax2.plot(year_list, attribute1_list, color="y")
-    ax2.set_ylabel("music %s" %(attribute_list_task2[0]))
     ax2.set_xlabel("Year")
+    ax2.set_ylabel("music %s" %(attribute_list_task2[0]))
+    
     #fig.show()
     #bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
     if bar1 != None:

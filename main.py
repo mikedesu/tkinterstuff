@@ -10,6 +10,7 @@ import ast
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
+
 window = None
 main_frame = None
 my_canvas = None
@@ -21,7 +22,7 @@ yearlist_attribute = None
 attribute_list = None
 artist_entry = None
 attribute_entries = None
-lbl = None
+lbl = None````
 val1 = None
 btn1 = None
 btn2 = None
@@ -105,7 +106,7 @@ def genre_popularity():
     subplot1 = figure1.add_subplot(111) 
     xAxis = genrelst
     yAxis = popularity
-    subplot1.bar(xAxis,yAxis, color = 'lightsteelblue') 
+    subplot1.bar(xAxis,yAxis, color = 'blue') 
     
     if bar1 != None:
         bar1.get_tk_widget().pack_forget()
@@ -350,7 +351,8 @@ def initVars():
     attribute_list = StringVar(second_frame, value=" ")
     artist_entry = StringVar(second_frame, value=" ")
     attribute_entries = StringVar(second_frame,value=" ")
-    lbl = Label(second_frame, text="Please enter genres from 'Genre List': \n (with a comma between each genre)\n also enter artists of interest above", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    #compare_genres = StringVar(second_frame, value=" ")
+    lbl = Label(second_frame, text="Please enter genres from 'Genre List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lbl.grid(column=0, row=0)
     val1= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
     val1.grid(column=1, row=0)
@@ -363,7 +365,7 @@ def initVars():
     genrelist=get_genrelist()
     for g in genrelist:
         listbox.insert(END, g)
-    lb2= Label(second_frame, text="Please enter years of interest here: \n Followed by two attributes (from 'Attribute List' below) \n in the next line: \n (with a comma between each year/attribute)", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    lb2= Label(second_frame, text="Please enter years of interest in first entry \n followed by two attributes (from 'Attribute List' below) \n in second entry:", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lb2.grid(column=0, row=8)
     val2=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= yearlist_attribute, justify=LEFT, width=50)
     val2.grid(column=1, row=8)  #6
@@ -371,7 +373,7 @@ def initVars():
     val2a.grid(column=2, row=8)  #6
     btn2=ttk.Button(second_frame, text="Track attributes throughout the years", width=35, command=pressed_danceabilitybtn)
     btn2.grid(column=0, row=9) #row 8
-    lb3= Label(second_frame, text="Please enter five artists of interest \n from 'Artist List': \n (with a comma between each artist)", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    lb3= Label(second_frame, text="Please enter five artists of interest \n from 'Artist List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lb3.grid(column=0, row=12)  #18
     val3=Entry(second_frame, font = ("times new roman", 16, "bold"),bd=8, bg="grey", fg='black', textvariable= artist_entry,justify=LEFT, width=50)
     val3.grid(column=1, row=12)  #6
@@ -384,7 +386,7 @@ def initVars():
     artistlist=get_artistlist()
     for a in artistlist:
         listbox1.insert(END, a)
-    lb4=Label(second_frame, text="Please enter two attributes from 'Attribute List' \n (with a comma and no space between each attribute) \n (also ensure that five artists are entered directly above)",
+    lb4=Label(second_frame, text="Please enter two attributes from 'Attribute List' \n (ensure that five artists are entered in above entry)",
     font = ("times new roman", 16, "bold"), bg ="powder blue", fg="black")
     lb4.grid(column=0, row = 19)  #18
     val4=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= attribute_entries,justify=LEFT, width=50)
@@ -400,9 +402,9 @@ def initVars():
         listbox2.insert(END, a)
     #lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
     #lb5.grid(column=0, row=25)
-    #val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
+    #val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= compare_genres, justify=LEFT, width=50)
     #val5.grid(column=1, row=25)
-    #btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= genre_popularity)
+    #btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= XX)
     #btn5.grid(column=0, row=27)
 
 

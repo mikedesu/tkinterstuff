@@ -235,17 +235,38 @@ def get_artist_pop(artist_list):
     except Exception as e:
         tk.messagebox.showerror(title="Error", message="data.csv not found")
 
-        
+     
+
+
+
+
+
+
 def pressed_artist_pop():
+    global artist_entry
     artist_str=artist_entry.get()
+
+
     artist_list=[x.strip() for x in artist_str.split(",")]
+    
+    print(artist_list)
+    
     artist_popularity=get_artist_pop(artist_list)
+    
+    print(artist_popularity)
+
     colors=['r','y','b','g','m']
-    plt.pie(artist_popularity, labels = artist_list, colors=colors,  
-         startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), 
-        radius = 1.2, autopct = '%1.1f%%') 
+    
+    plt.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
+
     plt.legend(bbox_to_anchor=(.1,.1), loc="lower right")
     plt.show()
+
+
+
+
+
+
 
 
 

@@ -145,15 +145,15 @@ def get_popularity(genre_list):
     dataWithGenresFilepath = "Datasets/data_w_genres.csv"
     with open(dataWithGenresFilepath, newline='', encoding="utf-8") as csvfile:
         genrepop=csv.DictReader(csvfile)
-        popularity_threshold=50    
+        #popularity_threshold=50    
         genre_popularity=[]
         for genre in genre_list:
             genre_popularity.append(0)
         for row in genrepop:
             genrestr=row['genres']
             popularity=float(row['popularity'])
-            if popularity < popularity_threshold:
-                continue
+            #if popularity < popularity_threshold:
+            #    continue
             genre_current_row=ast.literal_eval(genrestr)
             i = 0
             len_genre_list = len(genre_list)
@@ -214,11 +214,15 @@ def get_artist_pop(artist_list):
     dataFilepath = "Datasets/data.csv"
     try:
         with open(dataFilepath, newline='', encoding="utf-8") as csvfile:
+            # read the whole data.csv file in
             genrepop=csv.DictReader(csvfile)  
+            
             popularity_threshold=50
             artist_popularity=[]
+            
             for artist in artist_list:
                 artist_popularity.append(0)
+            
             for row in genrepop:
                 artist_str=row['artists']
                 popularity=float(row['popularity'])
@@ -227,43 +231,17 @@ def get_artist_pop(artist_list):
                 artist_current_row=ast.literal_eval(artist_str)
                 len_artist_list = len(artist_list) 
                 for i in range(len_artist_list):
+                    
                     artist = artist_list[i]
+
                     for artist_a in artist_current_row:
-                        if artist == artist_a:
+                        if artist.lower() == artist_a.lower():
                             artist_popularity[i]+=1
             return artist_popularity
     except Exception as e:
-        tk.messagebox.showerror(title="Error", message="data.csv not found")
+        tk.messagebox.showerror(title="Error", message=str(e))
 
      
-
-
-
-
-
-
-def pressed_artist_pop():
-    global artist_entry
-    artist_str=artist_entry.get()
-
-
-    artist_list=[x.strip() for x in artist_str.split(",")]
-    
-    print(artist_list)
-    
-    artist_popularity=get_artist_pop(artist_list)
-    
-    print(artist_popularity)
-
-    colors=['r','y','b','g','m']
-    
-    plt.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
-
-    plt.legend(bbox_to_anchor=(.1,.1), loc="lower right")
-    plt.show()
-
-
-
 
 
 
@@ -279,11 +257,17 @@ def get_attribute_lists(artist_list, attributelst):
         genrepop=csv.DictReader(csvfile)
         attribute1_list=[]
         attribute2_list=[]
+        
+        print("artist_list")
         print(artist_list)
+        
+        print("attributelst[0], attributelist[1]")
         print(attributelst[0], attributelist[1])
+        
         for artist in artist_list:
             attribute1_list.append(0)
             attribute2_list.append(0)
+
         for row in genrepop:
             artist_str=row['artists']
             artist_current_row=[artist_str]
@@ -291,7 +275,7 @@ def get_attribute_lists(artist_list, attributelst):
             for i in range(len_artist_list):
                 artist = artist_list[i]
                 for artist_a in artist_current_row:
-                    if artist == artist_a:
+                    if artist.lower() == artist_a.lower():
                         attribute1_list[i]=row[attributelst[0]]
                         attribute2_list[i]=row[attributelst[1]]
         attribute1_list=[float(i) for i in attribute1_list]
@@ -310,8 +294,12 @@ def pressed_track_attributes():
     artist_list=[x.strip() for x in artist_str.split(",")]
     attribute_str=attribute_entries.get()
     attributelst=[x.strip() for x in attribute_str.split(",")]
+    
     attribute1_list, attribute2_list=get_attribute_lists(artist_list, attributelst)
     
+    print(attribute1_list)
+    print(attribute2_list)
+
     # this is where the graph is actually generated
     fig, (ax1, ax2)=plt.subplots(2)
     fig.suptitle("Tracking attributes throughout the years")
@@ -319,7 +307,7 @@ def pressed_track_attributes():
     ax1.set_ylabel("%s" %(attributelst[1]))
     ax2.plot(artist_list, attribute1_list, color="orange")
     ax2.set_ylabel("%s" %(attributelst[0]))
-    ax2.set_xlabel("Year")
+    ax2.set_xlabel("Artist")
     if bar1 != None:
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
@@ -349,6 +337,28 @@ def generate_attributes_graph():
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+def pressed_artist_pop():
+    global artist_entry
+    global bar1
+    artist_str=artist_entry.get()
+    artist_list=[x.strip() for x in artist_str.split(",")]
+    print(artist_list)
+    artist_popularity=get_artist_pop(artist_list)
+    print(artist_popularity)
+    colors=['r','y','b','g','m']
+    fig, ax1 = plt.subplots()
+    #plt.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
+    ax1.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
+    #plt.legend(bbox_to_anchor=(.1,.1), loc="lower right")
+    ax1.legend(bbox_to_anchor=(.1,.1), loc="lower right")
+    #plt.show()
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
+    bar1 = FigureCanvasTkAgg(fig, window)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
 
 
 

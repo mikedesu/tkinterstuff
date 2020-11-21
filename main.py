@@ -93,6 +93,38 @@ def createSecondFrame():
 
 bar1 = None
 
+
+
+
+
+def generate_simple_graph( xAxis=None, yAxis=None, xLabel=None, yLabel=None ):
+    global window
+    global bar1
+    assert( xAxis != None )
+    assert( yAxis != None )
+    assert( xLabel  != None )
+    assert( yLabel != None )
+    figureSize = (10,2)
+    figuredpi = 100
+    figure1 = Figure(figsize=figureSize, dpi=figuredpi)
+    nrows = 6
+    ncols = 1
+    beginEndPair = (1,5)
+    subplot1 = figure1.add_subplot(nrows, ncols, beginEndPair) 
+    #xAxis = genrelst
+    #yAxis = popularity
+    subplot1.bar(xAxis,yAxis, color = 'blue') 
+    figure1.suptitle("Genre Pop")
+    subplot1.set_xlabel(xLabel)
+    subplot1.set_ylabel(yLabel)
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
+    bar1 = FigureCanvasTkAgg(figure1, window)
+    bar1.get_tk_widget().pack( side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+
+
 def genre_popularity():
     global window
     global bar1
@@ -100,39 +132,13 @@ def genre_popularity():
     print("this is the genrelist: ", genrelst)
     popularity= get_popularity(genrelst)
     print(popularity)
-
     # create the bargraph figure and add it to the frame
-    
     # figureSize changes the size of the 'frame' holding the plot/graph
-    figureSize = (20,10)
-    figuredpi = 100
-
-    figure1 = Figure(figsize=figureSize, dpi=figuredpi)
-
-    nrows = 6
-    ncols = 1
-    beginEndPair = (1,5)
-    subplot1 = figure1.add_subplot(nrows, ncols, beginEndPair) 
-    
-    xAxis = genrelst
-    yAxis = popularity
-    
-    subplot1.bar(xAxis,yAxis, color = 'blue') 
-    
-    figure1.suptitle("Genre Pop")
-
-    subplot1.set_xlabel("xlabel")
-    subplot1.set_ylabel("ylabel")
-    
-    if bar1 != None:
-        bar1.get_tk_widget().pack_forget()
-    bar1 = FigureCanvasTkAgg(figure1, window)
-
-    bar1.get_tk_widget().pack( side=tk.LEFT, fill=tk.BOTH, expand=0)
-
-    #plt.title(label='Genre Popularity Throughout the Years', fontweight=10, pad='2.0')
-
-
+    # since we are doing this in a similar way for every graph that we generate,
+    # and because we are good computer scientists,
+    # lets write a function to handle graph creation and presentation
+    # that way we can call it for other buttons as well and simply pass diff values in
+    generate_simple_graph( genrelst, popularity, "xlabel", "ylabel" )
 
 
 def get_popularity(genre_list):
@@ -199,58 +205,37 @@ def get_danceabilitylist(year_list, attributelst_task2):
         return attribute1_list, attribute2_list
 
 
-def pressed_danceabilitybtn():
-    global window
-    global bar1
-    year_liststr=yearlist_attribute.get()
-    year_list=[x.strip() for x in year_liststr.split(",")]
-    attributestr=attribute_list.get()
-    attribute_list_task2=[x.strip() for x in attributestr.split(",")]
-    attribute1_list, attribute2_list=get_danceabilitylist(year_list, attribute_list_task2)
-    
-    fig, (ax1, ax2)=plt.subplots(2)
-    
-    fig.suptitle("Tracking attributes throughout the years")
-    ax1.plot(year_list, attribute2_list, color="m")
-    ax1.set_ylabel("music %s" %(attribute_list_task2[1]))
-    
-    ax2.plot(year_list, attribute1_list, color="y")
-    ax2.set_xlabel("Year")
-    ax2.set_ylabel("music %s" %(attribute_list_task2[0]))
-    
-    #fig.show()
-    #bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
-    if bar1 != None:
-        bar1.get_tk_widget().pack_forget()
-    bar1 = FigureCanvasTkAgg(fig, window)
-    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
 
 
-  
+
+ 
 
 def get_artist_pop(artist_list):
     dataFilepath = "Datasets/data.csv"
-    with open(dataFilepath, newline='', encoding="utf-8") as csvfile:
-        genrepop=csv.DictReader(csvfile)  
-        popularity_threshold=50
-        artist_popularity=[]
-        for artist in artist_list:
-            artist_popularity.append(0)
-        for row in genrepop:
-            artist_str=row['artists']
-            popularity=float(row['popularity'])
-            if popularity < popularity_threshold:
-                   continue
-            artist_current_row=ast.literal_eval(artist_str)
-            len_artist_list = len(artist_list) 
-            for i in range(len_artist_list):
-                artist = artist_list[i]
-                for artist_a in artist_current_row:
-                    if artist == artist_a:
-                        artist_popularity[i]+=1
-        return artist_popularity
-        
+    try:
+        with open(dataFilepath, newline='', encoding="utf-8") as csvfile:
+            genrepop=csv.DictReader(csvfile)  
+            popularity_threshold=50
+            artist_popularity=[]
+            for artist in artist_list:
+                artist_popularity.append(0)
+            for row in genrepop:
+                artist_str=row['artists']
+                popularity=float(row['popularity'])
+                if popularity < popularity_threshold:
+                       continue
+                artist_current_row=ast.literal_eval(artist_str)
+                len_artist_list = len(artist_list) 
+                for i in range(len_artist_list):
+                    artist = artist_list[i]
+                    for artist_a in artist_current_row:
+                        if artist == artist_a:
+                            artist_popularity[i]+=1
+            return artist_popularity
+    except Exception as e:
+        tk.messagebox.showerror(title="Error", message="data.csv not found")
 
+        
 def pressed_artist_pop():
     artist_str=artist_entry.get()
     artist_list=[x.strip() for x in artist_str.split(",")]
@@ -261,6 +246,11 @@ def pressed_artist_pop():
         radius = 1.2, autopct = '%1.1f%%') 
     plt.legend(bbox_to_anchor=(.1,.1), loc="lower right")
     plt.show()
+
+
+
+
+
 
 
 def get_attribute_lists(artist_list, attributelst):
@@ -288,12 +278,20 @@ def get_attribute_lists(artist_list, attributelst):
         return attribute1_list, attribute2_list
         
 
+
+
 def pressed_track_attributes():
+    global window
+    global bar1
+    global artist_entry 
+    global attribute_entries
     artist_str=artist_entry.get()
     artist_list=[x.strip() for x in artist_str.split(",")]
     attribute_str=attribute_entries.get()
     attributelst=[x.strip() for x in attribute_str.split(",")]
     attribute1_list, attribute2_list=get_attribute_lists(artist_list, attributelst)
+    
+    # this is where the graph is actually generated
     fig, (ax1, ax2)=plt.subplots(2)
     fig.suptitle("Tracking attributes throughout the years")
     ax1.plot(artist_list, attribute2_list, color="blue")
@@ -301,8 +299,74 @@ def pressed_track_attributes():
     ax2.plot(artist_list, attribute1_list, color="orange")
     ax2.set_ylabel("%s" %(attributelst[0]))
     ax2.set_xlabel("Year")
-    fig.show()
-  
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
+    bar1 = FigureCanvasTkAgg(fig, window)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+
+
+def generate_attributes_graph():
+    global window
+    global bar1
+    global yearlist_attribute 
+    global attribute_list 
+    year_liststr=yearlist_attribute.get()
+    year_list=[x.strip() for x in year_liststr.split(",")]
+    attributestr=attribute_list.get()
+    attribute_list_task2=[x.strip() for x in attributestr.split(",")]
+    # awful naming schema here, no hard feelings lol
+    attribute1_list, attribute2_list=get_danceabilitylist(year_list, attribute_list_task2)
+    fig, (ax1, ax2)=plt.subplots(2)
+    fig.suptitle("Tracking attributes throughout the years")
+    ax1.plot(artist_list, attribute2_list, color="blue")
+    ax1.set_ylabel("%s" %(attributelst[1]))
+    ax2.plot(artist_list, attribute1_list, color="orange")
+    ax2.set_ylabel("%s" %(attributelst[0]))
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
+    bar1 = FigureCanvasTkAgg(fig, window)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+
+
+
+
+
+def generate_simple_graph2( stitle=None, xLabel=None ):
+    global window
+    global bar1
+    global yearlist_attribute 
+    global attribute_list 
+    year_liststr=yearlist_attribute.get()
+    year_list=[x.strip() for x in year_liststr.split(",")]
+    attributestr=attribute_list.get()
+    attribute_list_task2=[x.strip() for x in attributestr.split(",")]
+    # awful naming schema here, no hard feelings lol
+    attribute1_list, attribute2_list=get_danceabilitylist(year_list, attribute_list_task2)
+    fig, (ax1, ax2)=plt.subplots(2)
+    fig.suptitle( stitle )
+    ax1.plot(year_list, attribute2_list, color="m")
+    ax1.set_ylabel("music %s" %(attribute_list_task2[1]))
+    ax2.plot(year_list, attribute1_list, color="y")
+    ax2.set_xlabel( xLabel )
+    ax2.set_ylabel("music %s" %(attribute_list_task2[0]))
+    if bar1 != None:
+        bar1.get_tk_widget().pack_forget()
+    bar1 = FigureCanvasTkAgg(fig, window)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+
+def pressed_danceabilitybtn():
+    generate_simple_graph2( "Tracking attributes throughout the years", "Year" )
+ 
+
+
+
+
 
 def get_genrelist():
     dataByGenreFilepath = "Datasets/data_by_genres.csv"
@@ -372,12 +436,15 @@ def initVars():
     attribute_list = StringVar(second_frame, value=" ")
     artist_entry = StringVar(second_frame, value=" ")
     attribute_entries = StringVar(second_frame,value=" ")
-    #compare_genres = StringVar(second_frame, value=" ")
+    compare_genres = StringVar(second_frame, value=" ")
+    
     lbl = Label(second_frame, text="Please enter genres from 'Genre List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lbl.grid(column=0, row=0)
     val1= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
     val1.grid(column=1, row=0)
+    
     btn1=ttk.Button(second_frame, text="Determine how many times the genres of interest \n have been associated with popular artists", width=35, command=genre_popularity)
+    
     btn1.grid(column=0, row=2)
     btn1a=tk.Button(second_frame, text="Genre List:", font =("times new roman", 16, "bold"), width=35)
     btn1a.grid(column=1, row =2)
@@ -392,13 +459,17 @@ def initVars():
     val2.grid(column=1, row=8)  #6
     val2a=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= attribute_list,justify=LEFT, width=50)
     val2a.grid(column=2, row=8)  #6
+    
     btn2=ttk.Button(second_frame, text="Track attributes throughout the years", width=35, command=pressed_danceabilitybtn)
+    
     btn2.grid(column=0, row=9) #row 8
     lb3= Label(second_frame, text="Please enter five artists of interest \n from 'Artist List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lb3.grid(column=0, row=12)  #18
     val3=Entry(second_frame, font = ("times new roman", 16, "bold"),bd=8, bg="grey", fg='black', textvariable= artist_entry,justify=LEFT, width=50)
     val3.grid(column=1, row=12)  #6
+    
     btn3=ttk.Button(second_frame, text="Compare artist popularity (based upon the number \n of popular songs assoicated with each artist)", width=35,command=pressed_artist_pop)
+    
     btn3.grid(column=0, row=13) 
     btn3a=tk.Button(second_frame, text="Artist List:", font =("times new roman", 16, "bold"), width=35)
     btn3a.grid(column=1, row =13) 
@@ -412,7 +483,9 @@ def initVars():
     lb4.grid(column=0, row = 19)  #18
     val4=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= attribute_entries,justify=LEFT, width=50)
     val4.grid(column=1, row=19)  #6
+
     btn4=ttk.Button(second_frame, text="Track (and compare) attributes amongst the artists", width=35, command= pressed_track_attributes)
+    
     btn4.grid(column=0, row=21)
     btn4a=tk.Button(second_frame, text="Attribute List:", font =("times new roman", 16, "bold"), width=35)
     btn4a.grid(column=1, row =21)
@@ -421,12 +494,23 @@ def initVars():
     attributelist=get_attributes()
     for a in attributelist:
         listbox2.insert(END, a)
-    #lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
-    #lb5.grid(column=0, row=25)
-    #val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= compare_genres, justify=LEFT, width=50)
-    #val5.grid(column=1, row=25)
-    #btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command= XX)
-    #btn5.grid(column=0, row=27)
+    
+    lb5 = Label(second_frame, text="Please enter genres of interest \n from the 'Genre List' (above) for comparision: \n (with a comma between each genre) \n also enter artists of interest above", font = ("times new roman", 16, "bold"), bg = "powder blue", fg="black")
+    lb5.grid(column=0, row=25)
+    val5= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= compare_genres, justify=LEFT, width=50)
+    val5.grid(column=1, row=25)
+    
+    btn5=ttk.Button(second_frame, text="Compare Genres", width=35, command=compareGenresButtonPressed )
+    
+    btn5.grid(column=0, row=35)
+
+
+
+
+def compareGenresButtonPressed():
+    print("button pressed")
+
+
 
 
 def main():

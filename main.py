@@ -565,6 +565,7 @@ def compareGenresButtonPressed():
 
 def generate_heatmap():
     global compare_genres 
+    global bar1
     compare_genres_str = compare_genres.get()
     print( "compare_genres_str:", compare_genres_str ) 
 
@@ -679,7 +680,11 @@ def generate_heatmap():
                 text = ax.text(j, i, x, ha="center", va="center", color="w")
         ax.set_title("Genre Comparison")
         fig.tight_layout()
-        plt.show()
+        #plt.show()
+        if bar1 != None:
+            bar1.get_tk_widget().pack_forget()
+        bar1 = FigureCanvasTkAgg(fig, window)
+        bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
 
 
 def main():

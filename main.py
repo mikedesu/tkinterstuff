@@ -47,7 +47,7 @@ attributelist=None
 lb5=None
 val5=None
 btn5=None
-
+compare_genres=None
 
 def createWindow():
     global window
@@ -462,6 +462,7 @@ def initVars():
     global lb5
     global val5
     global btn5
+    global compare_genres
     genrepop = StringVar(second_frame, value="")
     yearlist_attribute = StringVar(second_frame, value=" ")
     attribute_list = StringVar(second_frame, value=" ")
@@ -546,9 +547,19 @@ def compareGenresButtonPressed():
 
 
 def generate_heatmap():
+    global compare_genres 
+    compare_genres_str = compare_genres.get()
+    print( "compare_genres_str:", compare_genres_str ) 
+
+    new_genre_list = compare_genres_str.split(",")
+    print( "new_genre_list:", new_genre_list )
+
     with open('Datasets/data_by_genres.csv', newline='') as csvfile:
         genre_data=csv.DictReader(csvfile)
-        genres_list=["pop", 'traditional country', "jazz", 'metal']
+        
+        #genres_list=["pop", 'traditional country', "jazz", 'metal']
+        genres_list=new_genre_list 
+
         attribute_list=['acousticness', 'energy', 'danceability', 'liviness']
         acousticness=[]
         energy=[]

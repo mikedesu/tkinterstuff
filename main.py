@@ -49,6 +49,24 @@ val5=None
 btn5=None
 compare_genres=None
 
+attributeList = [
+    "acousticness",
+    "danceability",
+    "duration_ms",
+    "energy",
+    "instrumentalness",
+    "liveness",
+    "loudness",
+    "speechiness",
+    "tempo",
+    "valence",
+    "popularity",
+    "key",
+    "mode",
+    "count"
+]
+
+
 def createWindow():
     global window
     window = Tk()
@@ -545,7 +563,6 @@ def compareGenresButtonPressed():
 
 
 
-
 def generate_heatmap():
     global compare_genres 
     compare_genres_str = compare_genres.get()
@@ -555,40 +572,98 @@ def generate_heatmap():
     print( "new_genre_list:", new_genre_list )
 
     with open('Datasets/data_by_genres.csv', newline='') as csvfile:
-        genre_data=csv.DictReader(csvfile)
+        genre_data = csv.DictReader(csvfile)
         
         #genres_list=["pop", 'traditional country', "jazz", 'metal']
-        genres_list=new_genre_list 
+        genres_list = new_genre_list 
+        len_genres_list = len(genres_list)
+        
+        acousticness = []
+        danceability = []
+        duration_ms  = []
+        energy       = []
+        instrumentalness = []
+        liveness     = []
+        loudness     = []
+        speechiness  = []
+        tempo        = []
+        valence      = []
+        popularity   = []
+        key          = []
+        mode         = []
+        #count        = []
 
-        attribute_list=['acousticness', 'energy', 'danceability', 'liviness']
-        acousticness=[]
-        energy=[]
-        danceability=[]
-        liviness=[]
         for genre in genres_list:
             acousticness.append(0)
-            energy.append(0)
             danceability.append(0)
-            liviness.append(0)
+            duration_ms.append(0)
+            energy.append(0)
+            instrumentalness.append(0)
+            liveness.append(0)
+            loudness.append(0)
+            speechiness.append(0)
+            tempo.append(0)
+            valence.append(0)
+            popularity.append(0)
+            key.append(0)
+            mode.append(0)
+            #count.append(0)
+        
         for row in genre_data:
-            len_genres_list=len(genres_list)
+            
             for i in range(len_genres_list):
                 genre=genres_list[i]
                 if genre==row['genres']:
-                    acousticness[i]= row['acousticness']
-                    danceability[i]=row['danceability']
-                    energy[i]=row['energy']
-                    liviness[i]=row['liveness']
-        acousticness=list(map(float, acousticness))
-        energy = list(map(float, energy))
+                    acousticness[i] = row['acousticness']
+                    danceability[i] = row['danceability']
+                    duration_ms[i]  = row['duration_ms']
+                    energy[i]       = row['energy']
+                    instrumentalness[i] = row['instrumentalness']
+                    liveness[i]     = row['liveness']
+                    loudness[i]     = row['loudness']
+                    speechiness[i]  = row['speechiness']
+                    tempo[i]        = row['tempo']
+                    valence[i]      = row['valence']
+                    popularity[i]   = row['popularity']
+                    key[i]          = row['key']
+                    mode[i]         = row['mode']
+                    #count[i]        = row['count']
+
+        acousticness = list(map(float, acousticness))
         danceability = list(map(float, danceability))
-        liviness = list(map(float, liviness))
-        new_a=[acousticness, danceability,energy, liviness]
-        print(danceability)
-        print(new_a)
-        #new_a= list(map(float,a))
-        fig, ax=plt.subplots()
-        im=ax.imshow(new_a)
+        duration_ms = list(map(float, duration_ms))
+        energy = list(map(float, energy))
+        instrumentalness = list(map(float, instrumentalness))
+        liveness = list(map(float, liveness))
+        loudness = list(map(float, loudness))
+        speechiness = list(map(float, speechiness))
+        tempo = list(map(float, tempo))
+        valence = list(map(float, valence))
+        popularity = list(map(float, popularity))
+        key = list(map(float, key))
+        mode = list(map(float, mode))
+
+        attributeList = [
+            "acousticness",
+            "danceability",
+            "energy",
+            "instrumentalness",
+            "liveness",
+        ]
+
+        combined_attributes_list = [
+            acousticness,
+            danceability,
+            energy,
+            instrumentalness,
+            liveness,
+        ]
+        attribute_list = attributeList
+
+        assert( len(attribute_list) == len(combined_attributes_list) ) 
+
+        fig, ax = plt.subplots()
+        im      = ax.imshow( combined_attributes_list )
         plt.colorbar(im)
         ax.set_xticks(np.arange(len(genres_list)))
         ax.set_yticks(np.arange(len(attribute_list)))
@@ -600,13 +675,11 @@ def generate_heatmap():
         # Loop over data dimensions and create text annotations.
         for i in range(len(attribute_list)):
             for j in range(len(genres_list)):
-                x=float(f"{new_a[i][j]:.3f}")
+                x = float( f"{combined_attributes_list[i][j]:0.2f}" )
                 text = ax.text(j, i, x, ha="center", va="center", color="w")
         ax.set_title("Genre Comparison")
         fig.tight_layout()
         plt.show()
- 
-
 
 
 def main():

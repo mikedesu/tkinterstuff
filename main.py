@@ -11,43 +11,55 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
 
-window = None
-main_frame = None
-my_canvas = None
-my_scrollbar = None
-my_scrollbarH = None
-second_frame = None
-genrepop = None
+window             = None
+main_frame         = None
+my_canvas          = None
+my_scrollbar       = None
+my_scrollbarH      = None
+second_frame       = None
+genrepop           = None
 yearlist_attribute = None
-attribute_list = None
-artist_entry = None
-attribute_entries = None
-lbl = None
-val1 = None
-btn1 = None
-btn2 = None
-btn3 = None
-btn1a = None
-listbox = None
-genrelist = None
-lb2 = None
-lb3 = None
-val2 = None
-val3 = None
-val2a = None
-btn3a = None
-listbox1 = None
-artistlist = None
-lb4=None
-val4=None
-btn4=None
-btn4a=None
-listbox2=None
-attributelist=None
-lb5=None
-val5=None
-btn5=None
-compare_genres=None
+artist_entry       = None
+attribute_entries  = None
+
+lbl                = None
+
+val1               = None
+
+btn1               = None
+btn2               = None
+btn3               = None
+btn1a              = None
+btn3a              = None
+btn4               = None
+btn4a              = None
+btn5               = None
+
+listbox            = None
+
+genrelist          = None
+
+lb2                = None
+lb3                = None
+lb4                = None
+lb5                = None
+
+val2               = None
+val3               = None
+val2a              = None
+val4               = None
+val5               = None
+
+listbox1           = None
+listbox2           = None
+
+artistlist         = None
+attributelist      = None
+attribute_list     = None
+
+compare_genres     = None
+
+bar1 = None
 
 attributeList = [
     "acousticness",
@@ -65,7 +77,6 @@ attributeList = [
     "mode",
     "count"
 ]
-
 
 def createWindow():
     global window
@@ -97,22 +108,12 @@ def configMyCanvas():
     my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
     my_canvas.configure(xscrollcommand=my_scrollbarH.set)
 
+
 def createSecondFrame():
     global second_frame 
     global my_canvas 
     second_frame=Frame(my_canvas)
     my_canvas.create_window((0,0),window=second_frame, anchor="nw")  
-
-
-
-
-
-
-
-bar1 = None
-
-
-
 
 
 def generate_simple_graph( xAxis=None, yAxis=None, xLabel=None, yLabel=None ):
@@ -139,8 +140,6 @@ def generate_simple_graph( xAxis=None, yAxis=None, xLabel=None, yLabel=None ):
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(figure1, window)
     bar1.get_tk_widget().pack( side=tk.LEFT, fill=tk.BOTH, expand=0)
-
-
 
 
 def genre_popularity():
@@ -223,11 +222,6 @@ def get_danceabilitylist(year_list, attributelst_task2):
         return attribute1_list, attribute2_list
 
 
-
-
-
- 
-
 def get_artist_pop(artist_list):
     dataFilepath = "Datasets/data.csv"
     try:
@@ -259,16 +253,6 @@ def get_artist_pop(artist_list):
     except Exception as e:
         tk.messagebox.showerror(title="Error", message=str(e))
 
-     
-
-
-
-
-
-
-
-
-
 
 def get_attribute_lists(artist_list, attributelst):
     with open('Datasets/data_by_artist.csv', newline='',  encoding="utf-8") as csvfile:
@@ -276,11 +260,10 @@ def get_attribute_lists(artist_list, attributelst):
         attribute1_list=[]
         attribute2_list=[]
         
-        print("artist_list")
-        print(artist_list)
-        
-        print("attributelst[0], attributelist[1]")
-        print(attributelst[0], attributelist[1])
+        #print("artist_list")
+        #print(artist_list)
+        #print("attributelst[0], attributelist[1]")
+        #print(attributelst[0], attributelist[1])
         
         for artist in artist_list:
             attribute1_list.append(0)
@@ -299,8 +282,6 @@ def get_attribute_lists(artist_list, attributelst):
         attribute1_list=[float(i) for i in attribute1_list]
         attribute2_list=[float(i) for i in attribute2_list]
         return attribute1_list, attribute2_list
-        
-
 
 
 def pressed_track_attributes():
@@ -315,8 +296,8 @@ def pressed_track_attributes():
     
     attribute1_list, attribute2_list=get_attribute_lists(artist_list, attributelst)
     
-    print(attribute1_list)
-    print(attribute2_list)
+    #print(attribute1_list)
+    #print(attribute2_list)
 
     # this is where the graph is actually generated
     fig, (ax1, ax2)=plt.subplots(2)
@@ -330,8 +311,6 @@ def pressed_track_attributes():
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
-
-
 
 
 def generate_attributes_graph():
@@ -362,26 +341,20 @@ def pressed_artist_pop():
     global bar1
     artist_str=artist_entry.get()
     artist_list=[x.strip() for x in artist_str.split(",")]
-    print(artist_list)
+    #print(artist_list)
     artist_popularity=get_artist_pop(artist_list)
-    print(artist_popularity)
-    colors=['r','y','b','g','m']
+    #print(artist_popularity)
+    colors = ['r','y','b','g','m']
     fig, ax1 = plt.subplots()
     #plt.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
-    ax1.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
     #plt.legend(bbox_to_anchor=(.1,.1), loc="lower right")
-    ax1.legend(bbox_to_anchor=(.1,.1), loc="lower right")
     #plt.show()
+    ax1.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
+    ax1.legend(bbox_to_anchor=(.1,.1), loc="lower right")
     if bar1 != None:
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
-
-
-
-
-
-
 
 
 def generate_simple_graph2( stitle=None, xLabel=None ):
@@ -389,19 +362,29 @@ def generate_simple_graph2( stitle=None, xLabel=None ):
     global bar1
     global yearlist_attribute 
     global attribute_list 
-    year_liststr=yearlist_attribute.get()
-    year_list=[x.strip() for x in year_liststr.split(",")]
-    attributestr=attribute_list.get()
-    attribute_list_task2=[x.strip() for x in attributestr.split(",")]
+
+    #year_liststr = yearlist_attribute.get()
+    year_list = [x.strip() for x in yearlist_attribute.get().split(",")]
+    #attributestr = attribute_list.get()
+    #attribute_list_task2 = [x.strip() for x in attribute_list.get().split(",")]
+    user_entered_attributes_list = [x.strip() for x in attribute_list.get().split(",")]
+    
     # awful naming schema here, no hard feelings lol
     attribute1_list, attribute2_list=get_danceabilitylist(year_list, attribute_list_task2)
-    fig, (ax1, ax2)=plt.subplots(2)
+    
+    fig, (ax1, ax2) = plt.subplots(2)
     fig.suptitle( stitle )
+
     ax1.plot(year_list, attribute2_list, color="m")
-    ax1.set_ylabel("music %s" %(attribute_list_task2[1]))
+    
+    ax1.set_ylabel("music %s" %( user_entered_attributes_list[1] ))
+
     ax2.plot(year_list, attribute1_list, color="y")
+
     ax2.set_xlabel( xLabel )
-    ax2.set_ylabel("music %s" %(attribute_list_task2[0]))
+    
+    ax2.set_ylabel("music %s" %( user_entered_attributes_list[0] ))
+
     if bar1 != None:
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
@@ -412,9 +395,6 @@ def generate_simple_graph2( stitle=None, xLabel=None ):
 def pressed_danceabilitybtn():
     generate_simple_graph2( "Tracking attributes throughout the years", "Year" )
  
-
-
-
 
 
 def get_genrelist():
@@ -490,23 +470,32 @@ def initVars():
     
     lbl = Label(second_frame, text="Please enter genres from 'Genre List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lbl.grid(column=0, row=0)
-    val1= Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
+    val1 = Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
     val1.grid(column=1, row=0)
     
-    btn1=ttk.Button(second_frame, text="Determine how many times the genres of interest \n have been associated with popular artists", width=35, command=genre_popularity)
+    btn1 = ttk.Button(second_frame, text="Determine how many times the genres of interest \n have been associated with popular artists", width=35, command=genre_popularity)
     
     btn1.grid(column=0, row=2)
-    btn1a=tk.Button(second_frame, text="Genre List:", font =("times new roman", 16, "bold"), width=35)
+    
+    btn1a = tk.Button(second_frame, text="Genre List:", font =("times new roman", 16, "bold"), width=35)
+    
     btn1a.grid(column=1, row =2)
+    
     listbox = Listbox(second_frame)
+    
     listbox.grid(column=1, row=4)  #10
-    genrelist=get_genrelist()
+    
+    genrelist = get_genrelist()
+    
     for g in genrelist:
         listbox.insert(END, g)
-    lb2= Label(second_frame, text="Please enter years of interest in first entry \n followed by two attributes (from 'Attribute List' below) \n in second entry:", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    
+    lb2 = Label(second_frame, text="Please enter years of interest in first entry \n followed by two attributes (from 'Attribute List' below) \n in second entry:", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
     lb2.grid(column=0, row=8)
+    
     val2=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= yearlist_attribute, justify=LEFT, width=50)
     val2.grid(column=1, row=8)  #6
+    
     val2a=Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black',textvariable= attribute_list,justify=LEFT, width=50)
     val2a.grid(column=2, row=8)  #6
     

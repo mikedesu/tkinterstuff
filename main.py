@@ -32,7 +32,7 @@ btn5               = None
 
 listbox            = None
 
-lbl                = None
+label1             = None
 lb2                = None
 lb3                = None
 lb4                = None
@@ -355,7 +355,7 @@ def initVars():
     global attribute_list 
     global artist_entry 
     global attribute_entries 
-    global lbl
+    global label1
     global val1
     global btn1
     global btn2
@@ -388,8 +388,8 @@ def initVars():
     attribute_entries  = StringVar( second_frame, value="" )
     compare_genres     = StringVar( second_frame, value="" )
     
-    lbl = Label(second_frame, text="Please enter genres from 'Genre List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
-    lbl.grid(column=0, row=0)
+    label1 = Label(second_frame, text="Please enter genres from 'Genre List': ", font=("times new roman", 16, "bold"), bg="powder blue", fg="black")
+    label1.grid(column=0, row=0)
 
     val1 = Entry(second_frame, font = ("times new roman", 16, "bold"),bd = 8, bg = "grey", fg='black', textvariable= genrepop, justify=LEFT, width=50)
     val1.grid(column=1, row=0)
@@ -403,7 +403,6 @@ def initVars():
     listbox = Listbox(second_frame)
     listbox.grid(column=1, row=4)  #10
     
-    #genrelist = get_genrelist()
     for g in get_genrelist():
         listbox.insert(END, g)
     
@@ -431,7 +430,7 @@ def initVars():
     btn3a=tk.Button(second_frame, text="Artist List:", font =("times new roman", 16, "bold"), width=35)
     btn3a.grid(column=1, row =13) 
     
-    listbox1=Listbox(second_frame)
+    listbox1 = Listbox(second_frame)
     listbox1.grid(column=1, row=15)  #32
     
     artistlist=get_artistlist()
@@ -566,13 +565,10 @@ def compareGenresButtonPressed():
                 text = ax.text(j, i, x, ha="center", va="center", color="w")
         ax.set_title("Genre Comparison")
         fig.tight_layout()
-        #plt.show()
-        
         if bar1 != None:
             bar1.get_tk_widget().pack_forget()
         bar1 = FigureCanvasTkAgg(fig, window)
         bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
-
 
 def main():
     try:
@@ -588,6 +584,5 @@ def main():
         print("Error: " + str(e))
         input()
     
-
 if __name__ == "__main__":
     main()

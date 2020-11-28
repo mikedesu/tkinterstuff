@@ -143,22 +143,29 @@ def genre_popularity():
 def get_popularity(genre_list):
     dataWithGenresFilepath = "Datasets/data_w_genres.csv"
     with open(dataWithGenresFilepath, newline='', encoding="utf-8") as csvfile:
-        genrepop=csv.DictReader(csvfile)   
-        genre_popularity=[]
-        for genre in genre_list:
-            genre_popularity.append(0)
+        
+        genrepop=csv.DictReader(csvfile)  
+
+        genre_popularity=[ 0 for genre in genre_list ]
+        
+        #for genre in genre_list:
+        #    genre_popularity.append(0)
+        
         for row in genrepop:
-            genrestr=row['genres']
-            popularity=float(row['popularity'])
-            genre_current_row=ast.literal_eval(genrestr)
+            genrestr          = row[ 'genres' ]
+            popularity        = float( row[ 'popularity' ] ) 
+            genre_current_row = ast.literal_eval( genrestr )
+            
             i = 0
-            len_genre_list = len(genre_list)
+            len_genre_list = len( genre_list )
             while i < len_genre_list:
-                genre = genre_list[i]
+                genre = genre_list[ i ]
+
                 for genre_a in genre_current_row:
                     if genre == genre_a:
-                        genre_popularity[i]+=1
+                        genre_popularity[i] += 1
                 i+=1
+
         return genre_popularity
     
 def genre_popularityLst():
@@ -178,20 +185,22 @@ def get_danceabilitylist(year_list, attributelst_task2):
     with open(dataByYearFilepath, newline='', encoding="utf-8") as csvfile:
         genredata =csv.DictReader(csvfile)
         year_list=list(map(float, year_list))
-        attribute1_list=[]
-        attribute2_list=[]
-        for attribute in year_list:
-            attribute1_list.append(0)
-            attribute2_list.append(0)
+        attribute1_list = [ 0 for attribute in year_list ]
+        attribute2_list = [ 0 for attribute in year_list ]
+        #for attribute in year_list:
+        #    attribute1_list.append(0)
+        #    attribute2_list.append(0)
+
         for row in genredata:
             len_year_list=len(year_list)
             len_year_list=len(year_list)
             for i in range(len_year_list):
                 int_year_current_row=int(row['year'])
-                int_year_list=int(year_list[i])
+                int_year_list=int(year_list[ i ])
                 if int_year_list == int_year_current_row:
-                    attribute1_list[i] = row[attributelst_task2[0]]
-                    attribute2_list[i] = row[attributelst_task2[1]]
+                    attribute1_list[ i ] = row[ attributelst_task2[ 0 ] ]
+                    attribute2_list[ i ] = row[ attributelst_task2[ 1 ] ]
+
         attribute1_list=[ float(i) for i in attribute1_list ]
         attribute2_list=[ float(i) for i in attribute2_list ]
         return attribute1_list, attribute2_list
@@ -201,21 +210,30 @@ def get_artist_pop(artist_list):
     try:
         with open(dataFilepath, newline='', encoding="utf-8") as csvfile:
             genrepop = csv.DictReader(csvfile)  
+
             popularity_threshold = 50
+
             artist_popularity = [ 0 for artist in artist_list ]
             for row in genrepop:
-                artist_str=row['artists']
-                popularity=float(row['popularity'])
+                
+                artist_str = row[ 'artists' ]
+                
+                popularity = float( row[ 'popularity' ] )
+
                 if popularity < popularity_threshold:
                        continue
-                artist_current_row=ast.literal_eval(artist_str)
-                len_artist_list = len(artist_list) 
-                for i in range(len_artist_list):  
-                    artist = artist_list[i]
+
+                artist_current_row = ast.literal_eval( artist_str )
+                len_artist_list = len( artist_list ) 
+
+                for i in range( len_artist_list ):  
+                    artist = artist_list[ i ]
                     for artist_a in artist_current_row:
                         if artist.lower() == artist_a.lower():
-                            artist_popularity[i]+=1
+                            artist_popularity[ i ] += 1
+
             return artist_popularity
+
     except Exception as e:
         tk.messagebox.showerror(title="Error", message=str(e))
 
@@ -238,18 +256,26 @@ def get_attribute_lists(artist_list, attributelst):
         attribute2_list=[float(i) for i in attribute2_list]
         return attribute1_list, attribute2_list
 
+
+
+
+
 def pressed_track_attributes():
     global window
     global bar1
     global artist_entry 
     global attribute_entries
-    artist_str=artist_entry.get()
-    artist_list=[x.strip() for x in artist_str.split(",")]
-    attribute_str=attribute_entries.get()
-    attributelst=[x.strip() for x in attribute_str.split(",")]
-    attribute1_list, attribute2_list=get_attribute_lists(artist_list, attributelst)
+    #artist_str=artist_entry.get()
+    artist_list=[x.strip() for x in artist_entry.get().split(",")]
+    #attribute_str = attribute_entries.get()
+    attributelst = [x.strip() for x in attribute_entries.get().split(",")]
+    
+    attribute1_list, attribute2_list = get_attribute_lists(artist_list, attributelst)
     fig, (ax1, ax2)=plt.subplots(2)
-    fig.suptitle("Tracking attributes throughout the years")
+    
+    thisTitle = "Tracking attributes of artists"
+    fig.suptitle( thisTitle )
+    
     ax1.plot(artist_list, attribute2_list, color="blue")
     ax1.set_ylabel("%s" %(attributelst[1]))
     ax2.plot(artist_list, attribute1_list, color="orange")
@@ -259,6 +285,9 @@ def pressed_track_attributes():
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+
 
 def generate_attributes_graph():
     global window
@@ -282,20 +311,42 @@ def generate_attributes_graph():
     bar1 = FigureCanvasTkAgg(fig, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
 
+
+
+
+
 def pressed_artist_pop():
     global artist_entry
     global bar1
-    artist_str=artist_entry.get()
-    artist_list=[x.strip() for x in artist_str.split(",")]
-    artist_popularity=get_artist_pop(artist_list)
+    #artist_str=artist_entry.get()
+    artist_list=[x.strip() for x in artist_entry.get().split(",")]
+    
+    artist_popularity = get_artist_pop(artist_list)
+    
+    print( type( artist_popularity ) )
+    print(  artist_popularity ) 
+
+    # what is the range of values we can pass in for colors?
     colors = ['r','y','b','g','m']
+    #colors = ['r']
+
+    assert( len(colors) > 0 )
+    
     fig, ax1 = plt.subplots()
+
+    #explodeTuple = (0.1)
+    #ax1.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode=explodeTuple, radius = 1.2, autopct = '%1.1f%%') 
     ax1.pie(artist_popularity, labels=artist_list, colors=colors, startangle=90, shadow = True, explode = (0.1, 0.1, 0.1, 0.1, 0.1), radius = 1.2, autopct = '%1.1f%%') 
+    
     ax1.legend(bbox_to_anchor=(.1,.1), loc="lower right")
     if bar1 != None:
         bar1.get_tk_widget().pack_forget()
     bar1 = FigureCanvasTkAgg(fig, window)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=0)
+
+
+
+
 
 def generate_simple_graph2( stitle=None, xLabel=None ):
     global window
